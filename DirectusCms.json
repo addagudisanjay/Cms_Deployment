@@ -29,7 +29,7 @@
 		},
 		"directusAdministratorEmail": {
 			"type": "string",
-			"defaultValue": "sanjay.addagudi@stereolize.com!",
+			"defaultValue": "sanjay.addagudi@stereolize.com",
 			"metadata": {
 				"description": "Directus administrative account email"
 			}
