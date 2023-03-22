@@ -149,7 +149,7 @@
 					},
 					{
 						"name": "DB_HOST",
-						"value": "[concat('devstereolizedatabaseserver'), '.database.windows.net')]"
+						"value": "[concat('devstereolizedatabaseserver', '.database.windows.net')]"
 					},
 					{
 						"name": "DB_PORT",
