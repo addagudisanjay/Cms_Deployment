@@ -48,9 +48,6 @@
 			"apiVersion": "2021-02-01-preview",
 			"name": "[concat('devstereolizedatabaseserver', '/directus')]",
 			"location": "[parameters('location')]",
-			"dependsOn": [
-				"[resourceId('Microsoft.Sql/servers','devstereolizedatabaseserver')]"
-			],
 			"sku": {
 				"name": "GP_S_Gen5",
 				"tier": "GeneralPurpose",
@@ -87,9 +84,6 @@
 			"apiVersion": "2018-11-01",
 			"name": "[parameters('siteName')]",
 			"location": "[parameters('location')]",
-			"dependsOn": [
-				"[resourceId('Microsoft.Web/serverfarms', 'devstereolizewebserver')]"
-			],
 			"kind": "app,linux,container",
 			"properties": {
 				"enabled": true,
