@@ -87,7 +87,7 @@
 		{
 			"type": "Microsoft.Sql/servers/firewallRules",
 			"apiVersion": "2021-02-01-preview",
-			"name": "[concat'devstereolizewebserver', '/AllowAllWindowsAzureIps')]",
+			"name": "[concat('devstereolizewebserver'), '/AllowAllWindowsAzureIps']",
 			"dependsOn": [
 				"[resourceId('Microsoft.Sql/servers', 'devstereolizewebserver')]"
 			],
