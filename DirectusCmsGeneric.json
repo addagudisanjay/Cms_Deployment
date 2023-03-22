@@ -87,9 +87,9 @@
 		{
 			"type": "Microsoft.Sql/servers/firewallRules",
 			"apiVersion": "2021-02-01-preview",
-			"name": "[concat(parameters('databaseServer'), '/AllowAllWindowsAzureIps')]",
+			"name": "[concat'devstereolizewebserver', '/AllowAllWindowsAzureIps')]",
 			"dependsOn": [
-				"[resourceId('Microsoft.Sql/servers', parameters('databaseServer'))]"
+				"[resourceId('Microsoft.Sql/servers', 'devstereolizewebserver')]"
 			],
 			"properties": {
 				"startIpAddress": "0.0.0.0",
