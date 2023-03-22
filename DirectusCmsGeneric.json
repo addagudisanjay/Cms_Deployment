@@ -88,7 +88,7 @@
 			"name": "[parameters('siteName')]",
 			"location": "[parameters('location')]",
 			"dependsOn": [
-				"[resourceId('Microsoft.Web/serverfarms', parameters('serverFarmName'))]"
+				"[resourceId('Microsoft.Web/serverfarms', 'devstereolizewebserver')]"
 			],
 			"kind": "app,linux,container",
 			"properties": {
@@ -105,7 +105,7 @@
 						"hostType": "Repository"
 					}
 				],
-				"serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverFarmName'))]",
+				"serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'devstereolizewebserver')]",
 				"reserved": true,
 				"isXenon": false,
 				"hyperV": false,
