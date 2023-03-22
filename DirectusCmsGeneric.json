@@ -259,7 +259,7 @@
 				"siteName": "[parameters('siteName')]",
 				"hostNameType": "Verified"
 			}
-		},
+		}
 	],
 	"outputs": {
 		"uniqueId": {
