@@ -46,7 +46,7 @@
 		{
 			"type": "Microsoft.Sql/servers/databases",
 			"apiVersion": "2021-02-01-preview",
-			"name": "[concat(parameters('databaseServer'), '/directus')]",
+			"name": "[concat('devstereolizedatabaseserver', '/directus')]",
 			"location": "[parameters('location')]",
 			"dependsOn": [
 				"[resourceId('Microsoft.Sql/servers','devstereolizedatabaseserver')]"
