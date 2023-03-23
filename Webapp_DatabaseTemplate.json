@@ -39,7 +39,7 @@
 		{
 			"type": "Microsoft.Sql/servers/databases",
 			"apiVersion": "2021-02-01-preview",
-			"name": "[concat('devstereolizedatabaseserver', /parameters('databaseName'))]",
+			"name": "[concat('devstereolizedatabaseserver', '/',parameters('databaseName'))]",
 			"location": "[parameters('location')]",
 			"sku": {
 				"name": "GP_S_Gen5",
