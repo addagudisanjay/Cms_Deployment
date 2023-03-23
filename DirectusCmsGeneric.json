@@ -68,15 +68,6 @@
 			}
 		},
 		{
-			"type": "Microsoft.Sql/servers/firewallRules",
-			"apiVersion": "2021-02-01-preview",
-			"name": "[concat('devstereolizewebserver', '/AllowAllWindowsAzureIps')]",
-			"properties": {
-				"startIpAddress": "0.0.0.0",
-				"endIpAddress": "0.0.0.0"
-			}
-		},
-		{
 			"type": "Microsoft.Web/sites",
 			"apiVersion": "2018-11-01",
 			"name": "[parameters('siteName')]",
