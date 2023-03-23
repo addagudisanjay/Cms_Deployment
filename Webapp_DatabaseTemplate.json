@@ -1,0 +1,245 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"location": {
+			"type": "string",
+			"defaultValue": "WestEurope"
+		},
+		"directusAdministratorEmail": {
+			"type": "string",
+			"defaultValue": "sanjay.addagudi@stereolize.com",
+			"metadata": {
+				"description": "Directus administrative account email"
+			}
+		},
+		"directusAdministratorPassword": {
+			"type": "secureString",
+			"defaultValue": "ventuz@2019!",
+			"metadata": {
+				"description": "Directus administrative account password"
+			}
+		},
+		"siteName": {
+			"type": "string",
+			"defaultValue": "[concat('directus-', 'truckservices')]",
+			"metadata": {
+				"description": "The name of the web app that you wish to create."
+			}
+		},
+		"databaseName":{
+			
+			"type": "string",
+			"defaultValue": "[concat('devkineticcms', 'database')]",
+			"metadata": {
+				"description": "The name of the web app that you wish to create."
+		}
+	},
+	"resources": [
+		{
+			"type": "Microsoft.Sql/servers/databases",
+			"apiVersion": "2021-02-01-preview",
+			"name": "[concat('devstereolizedatabaseserver', parameters('databaseName'))]",
+			"location": "[parameters('location')]",
+			"sku": {
+				"name": "GP_S_Gen5",
+				"tier": "GeneralPurpose",
+				"family": "Gen5",
+				"capacity": 1
+			},
+			"kind": "v12.0,user,vcore,serverless",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 1073741824,
+				"catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+				"zoneRedundant": false,
+				"readScale": "Disabled",
+				"autoPauseDelay": 60,
+				"requestedBackupStorageRedundancy": "Geo",
+				"minCapacity": 0.5,
+				"isLedgerOn": false
+			}
+		},
+		{
+			"type": "Microsoft.Web/sites",
+			"apiVersion": "2018-11-01",
+			"name": "[parameters('siteName')]",
+			"location": "[parameters('location')]",
+			"kind": "app,linux,container",
+			"properties": {
+				"enabled": true,
+				"hostNameSslStates": [
+					{
+						"name": "[concat(parameters('siteName'), '.azurewebsites.net')]",
+						"sslState": "Disabled",
+						"hostType": "Standard"
+					},
+					{
+						"name": "[concat(parameters('siteName'), '.scm.azurewebsites.net')]",
+						"sslState": "Disabled",
+						"hostType": "Repository"
+					}
+				],
+				"serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'devstereolizewebserver')]",
+				"reserved": true,
+				"isXenon": false,
+				"hyperV": false,
+				"siteConfig": {
+					"numberOfWorkers": 1,
+					"linuxFxVersion": "DOCKER|directus/directus:latest",
+					"alwaysOn": false,
+					"http20Enabled": false
+				},
+				"scmSiteAlsoStopped": false,
+				"clientAffinityEnabled": false,
+				"clientCertEnabled": false,
+				"hostNamesDisabled": false,
+				"containerSize": 0,
+				"dailyMemoryTimeQuota": 0,
+				"httpsOnly": false,
+				"redundancyMode": "None"
+			}
+		},
+		{
+			"type": "Microsoft.Web/sites/config",
+			"apiVersion": "2018-11-01",
+			"name": "[concat(parameters('siteName'), '/web')]",
+			"location": "[parameters('location')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Web/sites', parameters('siteName'))]"
+			],
+			"properties": {
+				"appSettings": [
+					{
+						"name": "ADMIN_EMAIL",
+						"value": "[parameters('directusAdministratorEmail')]"
+					},
+					{
+						"name": "ADMIN_PASSWORD",
+						"value": "[parameters('directusAdministratorPassword')]"
+					},
+					{
+						"name": "DB_CLIENT",
+						"value": "mssql"
+					},
+					{
+						"name": "DB_HOST",
+						"value": "[concat('devstereolizedatabaseserver', '.database.windows.net')]"
+					},
+					{
+						"name": "DB_PORT",
+						"value": 1433
+					},
+					{
+						"name": "DB_DATABASE",
+						"value": "[parameters('databaseName')]"
+					},
+					{
+						"name": "DB_USER",
+						"value": "devdatabaseadmin"
+					},
+					{
+						"name": "DB_PASSWORD",
+						"value": "Ventuz@2019"
+					},
+					{
+						"name": "DB_ENCRYPT",
+						"value": "true"
+					},
+					{
+						"name": "CACHE_ENABLED",
+						"value": false
+					},
+					{
+						"name": "PUBLIC_URL",
+						"value": "[concat('https://', parameters('siteName'), '.azurewebsites.net')]"
+					},
+					{
+						"name": "RATE_LIMITER_ENABLED",
+						"value": false
+					},
+					{
+						"name": "KEY",
+						"value": "[guid(resourceGroup().id)]"
+					},
+					{
+						"name": "SECRET",
+						"value": "[concat(uniqueString(resourceGroup().id), uniqueString(guid(resourceGroup().id)))]"
+					}
+				],
+				"numberOfWorkers": 1,
+				"defaultDocuments": [
+					"index.html"
+				],
+				"netFrameworkVersion": "v4.0",
+				"requestTracingEnabled": false,
+				"remoteDebuggingEnabled": false,
+				"remoteDebuggingVersion": "VS2019",
+				"httpLoggingEnabled": true,
+				"logsDirectorySizeLimit": 35,
+				"detailedErrorLoggingEnabled": true,
+				"azureStorageAccounts": {},
+				"scmType": "None",
+				"use32BitWorkerProcess": true,
+				"webSocketsEnabled": false,
+				"alwaysOn": false,
+				"managedPipelineMode": "Integrated",
+				"virtualApplications": [
+					{
+						"virtualPath": "/",
+						"physicalPath": "site\\wwwroot",
+						"preloadEnabled": false
+					}
+				],
+				"loadBalancing": "LeastRequests",
+				"experiments": {
+					"rampUpRules": []
+				},
+				"autoHealEnabled": false,
+				"localMySqlEnabled": false,
+				"ipSecurityRestrictions": [
+					{
+						"ipAddress": "Any",
+						"action": "Allow",
+						"priority": 1,
+						"name": "Allow all",
+						"description": "Allow all access"
+					}
+				],
+				"scmIpSecurityRestrictions": [
+					{
+						"ipAddress": "Any",
+						"action": "Allow",
+						"priority": 1,
+						"name": "Allow all",
+						"description": "Allow all access"
+					}
+				],
+				"scmIpSecurityRestrictionsUseMain": false,
+				"http20Enabled": false,
+				"minTlsVersion": "1.2",
+				"ftpsState": "AllAllowed",
+				"reservedInstanceCount": 0
+			}
+		},
+		{
+			"type": "Microsoft.Web/sites/hostNameBindings",
+			"apiVersion": "2018-11-01",
+			"name": "[concat(parameters('siteName'), '/', parameters('siteName'), '.azurewebsites.net')]",
+			"location": "[parameters('location')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Web/sites', parameters('siteName'))]"
+			],
+			"properties": {
+				"siteName": "[parameters('siteName')]",
+				"hostNameType": "Verified"
+			}
+		}
+	],
+	"outputs": {
+		"uniqueId": {
+			"type": "string",
+			"value": "[uniqueString(resourceGroup().id)]"
+		}
+	}
+}
