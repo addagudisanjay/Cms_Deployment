@@ -33,6 +33,13 @@
 			"metadata": {
 				"description": "The name of the web app that you wish to create."
 			}
+		},
+		"storageContainerName": {
+			"type": "string",
+			"defaultValue": "directusfiles",
+			"metadata": {
+				"description": "Name of the Storage Container that will host the file uploads"
+			}
 		}
 	},
 	"resources": [
@@ -147,6 +154,26 @@
 						"value": "true"
 					},
 					{
+						"name": "STORAGE_LOCATIONS",
+						"value": "azure"
+					},
+					{
+						"name": "STORAGE_AZURE_DRIVER",
+						"value": "azure"
+					},
+					{
+						"name": "STORAGE_AZURE_CONTAINER_NAME",
+						"value": "[parameters('storageContainerName')]"
+					},
+					{
+						"name": "STORAGE_AZURE_ACCOUNT_NAME",
+						"value": "devstereolizestorage"
+					},
+					{
+						"name": "STORAGE_AZURE_ACCOUNT_KEY",
+						"value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', 'devstereolizestorage'), '2019-04-01').keys[0].value]"
+					},
+					{
 						"name": "CACHE_ENABLED",
 						"value": false
 					},
@@ -233,6 +260,16 @@
 			"properties": {
 				"siteName": "[parameters('siteName')]",
 				"hostNameType": "Verified"
+			}
+		},
+		{
+			"type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+			"apiVersion": "2021-04-01",
+			"name": "['devstereolizestorage', '/default/', parameters('storageContainerName'))]",
+			"properties": {
+				"defaultEncryptionScope": "$account-encryption-key",
+				"denyEncryptionScopeOverride": false,
+				"publicAccess": "None"
 			}
 		}
 	],
