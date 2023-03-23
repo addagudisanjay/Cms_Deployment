@@ -262,7 +262,6 @@
 				"hostNameType": "Verified"
 			}
 		},
-
 		{
 			"type": "Microsoft.Storage/storageAccounts/blobServices/containers",
 			"apiVersion": "2021-04-01",
